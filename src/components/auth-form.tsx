@@ -32,7 +32,7 @@ const AuthForm: FC<AuthFormProps> = ({ authType }) => {
           password: formdata.password.value,
         }),
       });
-
+      console.log(response,`Auth ${authType}`)  
       if (response.ok) {
         window.location.href = "/chat";
       } else {

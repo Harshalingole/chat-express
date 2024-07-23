@@ -17,7 +17,7 @@ interface ChatState {
   setCurChatId: (chatId: number | null) => void;
   setMsgContent: (msgContent: string) => void;
   setButtonClikMsgSend: (click: boolean) => void;
-  setChatUserName: (name: string) => void;
+  setChatUserName: (name: string | null) => void;
 }
 const useChatStore = create<ChatState>((set) => ({
   session: null,
@@ -34,7 +34,7 @@ const useChatStore = create<ChatState>((set) => ({
   setCurChatId: (chatId) => set({ curChatId: chatId }),
   setMsgContent: (msgContent) => set({ msgContent }),
   setButtonClikMsgSend: (click) => set({clickMsgSend: click}),
-  setChatUserName: (name:string) => set({chatUserName: name})
+  setChatUserName: (name) => set({chatUserName: name})
 }));
 
 export default useChatStore

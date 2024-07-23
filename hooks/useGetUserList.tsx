@@ -36,6 +36,7 @@ const useGetUserList = () => {
           filter: `id=neq.${authUserId}`,
         },
         (payload) => {
+          console.log('fetchUsers Realtime',payload)
           setUsersList((prev) => [...prev, payload.new as User]);
         }
       )
@@ -44,7 +45,7 @@ const useGetUserList = () => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [authUserId, supabase]);
+  }, [authUserId]);
 
   return { userList };
 };

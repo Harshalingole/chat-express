@@ -3,18 +3,27 @@
 import MessageList from "./message-list";
 import ChatInput from "./chat-input";
 import ChatUser from "./chat-user";
+import useIsMobile from "../../../../hooks/useIsMobile";
+import { cn } from "@/lib/utils";
+import useChatStore from "../../../../store/useStore";
 const ChatBox = () => {
-
+  const isMobile = useIsMobile();
+  const chatUserName = useChatStore((state) => state.chatUserName);
   return (
-    <section className="h-full bg-white/40 rounded-md col-start-3 col-end-10 flex flex-col justify-between w-full overflow-hidden">
-      <ChatUser />
+    <section
+      className={cn(
+        "chatbox h-full bg-white/50 rounded-md col-start-3 col-end-10  w-full overflow-hidden  flex flex-col justify-between",
+        isMobile && !chatUserName ? "hidden" : "block"
+      )}
+    >
+        <ChatUser />{/*  */}
+
       {/*  */}
-      <div className="flex-1 overflow-y-auto">
-        <MessageList />
-      </div>
+
+      <MessageList />
+
       {/*  */}
       <ChatInput />
-    
     </section>
   );
 };

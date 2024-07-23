@@ -21,7 +21,7 @@ const ChatInput: React.FC = () => {
     <>
       {chatUserName && (
         <form
-          className="w-full p-4 bg-white/50 shadow-md shadow-gray-500  flex justify-between  py-2 px-1"
+          className="w-full p-4 bg-white shadow-md shadow-gray-800  flex justify-between  py-2 px-1"
           onSubmit={handleSendMessage}
         >
           <Input

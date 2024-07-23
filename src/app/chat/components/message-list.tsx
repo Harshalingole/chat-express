@@ -13,9 +13,8 @@ export type Message = {
 const MessageList: React.FC = () => {
   const chatId = useStore((state) => state.curChatId);
   const currentUserId = useStore((state) => state.session?.user.id);
-  
   const { messages, error, loading, subscribeToMessages } =
-    useGetMessages(chatId as number);
+    useGetMessages();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -33,14 +32,9 @@ const MessageList: React.FC = () => {
   if (error) {
     return <div>{error}</div>;
   }
-  if (loading) {
-    return <div>{loading}</div>;
-  }
-  if(!currentUserId){
-    return <p>Select User to Start Conversation</p>
-  }
+  
   return (
-    <div className="flex flex-col space-y-4 p-4 overflow-y-auto h-full  no-scrollbar">
+    <div className="flex flex-col space-y-4 p-4 overflow-y-auto h-[80%] md:h-[82%] no-scrollbar">
       {messages.map((message) => (
         <div
           key={message.id}

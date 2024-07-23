@@ -1,20 +1,22 @@
 import { useEffect, useState, useCallback } from 'react';
 import { createClient } from '../utils/supabase/client';
 import { Message } from '@/app/chat/components/message-list';
+import useChatStore from '../store/useStore';
 
 const supabase = createClient();
 
-const useGetMessages = (chatId: number) => {
+const useGetMessages = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-
-  const fetchMessages = useCallback(async (chatId: number) => {
+  const curChatId = useChatStore((state) => state.curChatId)
+  const fetchMessages = useCallback(async (chatIdFetch: number) => {
+    if(chatIdFetch === null) return
     setLoading(true);
     const { data, error } = await supabase
       .from('messages')
       .select('*')
-      .eq('chat_id', chatId)
+      .eq('chat_id', chatIdFetch)
       .order('sent_at', { ascending: true });
 
     if (error) {
@@ -30,8 +32,7 @@ const useGetMessages = (chatId: number) => {
       .channel('broadcast')
       .on('broadcast',{event:"new_message"}, (payload) => {
         const newMessage = payload.payload;
-        console.log(newMessage,"subscribeToMessages")
-        if (newMessage.chat_id === chatId) {
+        if (newMessage.chat_id === curChatId) {
           setMessages((prevMessages) => [...prevMessages, newMessage]);
         }
       })
@@ -40,14 +41,12 @@ const useGetMessages = (chatId: number) => {
     return () => {
       supabase.removeChannel(messageSubscription);
     };
-  }, []);
+  }, [curChatId]);
 
   useEffect(() => {
-    if (chatId) {
-      fetchMessages(chatId);
-      subscribeToMessages(chatId);
-    }
-  }, [chatId, fetchMessages, subscribeToMessages]);
+      fetchMessages(Number(curChatId));
+      subscribeToMessages(Number(curChatId));
+  }, [curChatId, fetchMessages, subscribeToMessages]);
 
   return { messages, error, loading, subscribeToMessages };
 };
