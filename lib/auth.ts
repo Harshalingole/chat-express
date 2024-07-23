@@ -12,17 +12,4 @@ export const comparePassword = async(password:string,hash:string):Promise<boolea
   return await bcrypt.compare(password,hash)
 }
 
-const secret = process.env.NEXT_PUBLIC_JWT_SECRET
 
-export const generateToken = (payload:object):string => {
-  return jwt.sign(payload,secret,{expiresIn: '1h'})
-}
-
-
-export const verifyToken = (token: string): object | null  => {
-  try {
-    return jwt.verify(token, secret);
-  } catch (error) {
-    return null;
-  }
-}
