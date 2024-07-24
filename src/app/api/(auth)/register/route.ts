@@ -1,5 +1,4 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { hashPassword } from "../../../../../lib/auth";
+
 import { supabase } from "../../../../../lib/supabase";
 import { NextResponse } from "next/server";
 
@@ -30,16 +29,6 @@ export async function POST(req: Request) {
   }
 
   ``;
-  NextResponse.json({ message: "Register Successfully", user: authUser.user });
+  return NextResponse.json({ message: "Register Successfully ! Now login with Register detail", user: authUser.user });
 
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email: email,
-    password: password,
-  });
-
-  if (error) {
-    return NextResponse.json({ message: `${error.message}` }, { status: 401 });
-  }
-
-  return NextResponse.json({ message: "Login successful", user: data.user });
 }

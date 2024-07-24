@@ -1,9 +1,11 @@
 import AuthForm from "@/components/auth-form";
-
+import { SnackbarProvider } from "notistack";
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <AuthForm authType="register" />
-    </main>
+    <>
+      <main className="flex min-h-screen flex-col items-center justify-between p-24">
+        <AuthForm authType="register" />
+      </main>
+    </>
   );
 }

@@ -5,6 +5,10 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { useRouter } from "next/navigation";
 import { Loader } from "lucide-react";
+import { enqueueSnackbar, SnackbarProvider } from "notistack";
+import useChatStore from "../../store/useStore";
+import { User } from "@supabase/supabase-js";
+
 
 type AuthFormProps = {
   authType: "register" | "login";
@@ -18,9 +22,11 @@ type FormData = {
 const AuthForm: FC<AuthFormProps> = ({ authType }) => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const setUser = useChatStore((state) => state.setUser)
   const router = useRouter();
   const sendReq = async (formdata: FormData) => {
     setLoading(true);
+    
     try {
       const response = await fetch(`/api/${authType}`, {
         method: "POST",
@@ -31,15 +37,17 @@ const AuthForm: FC<AuthFormProps> = ({ authType }) => {
           username: formdata.username.value,
           password: formdata.password.value,
         }),
-      });
-      console.log(response,`Auth ${authType}`)  
+      }); 
       if (response.ok) {
+        const data = await response.json()
+        setUser(data.user as User)
+        enqueueSnackbar(data.message,{variant: 'success'})
         window.location.href = "/chat";
       } else {
         const errorData = await response.json();
-        setError(errorData.message || `Failed to ${authType}`);
+        enqueueSnackbar(errorData.message || `Failed to ${authType}`,{variant: 'error'})
       }
-    } catch (error) {
+    } catch (error) { 
       console.error("Error:", error);
       setError("An unexpected error occurred");
     } finally {
@@ -108,6 +116,7 @@ const AuthForm: FC<AuthFormProps> = ({ authType }) => {
         )}
       </div>
       {error && <p className="text-red-500">{error}</p>}
+      <SnackbarProvider />
     </form>
   );
 };

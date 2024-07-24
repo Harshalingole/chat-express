@@ -1,5 +1,5 @@
 // store/useChatStore.ts
-import { Session } from '@supabase/supabase-js';
+import { Session, User } from '@supabase/supabase-js';
 import create from 'zustand';
 
 interface ChatState {
@@ -11,6 +11,7 @@ interface ChatState {
   msgContent: string;
   clickMsgSend: boolean,
   chatUserName: string | null,
+  user: User | null,
   setSession: (session: Session) => void;
   setAuthChatIds: (chatIds: number[]) => void;
   setCurChatUserId: (userId: string) => void;
@@ -18,6 +19,7 @@ interface ChatState {
   setMsgContent: (msgContent: string) => void;
   setButtonClikMsgSend: (click: boolean) => void;
   setChatUserName: (name: string | null) => void;
+  setUser: (user: User | null) => void
 }
 const useChatStore = create<ChatState>((set) => ({
   session: null,
@@ -28,13 +30,16 @@ const useChatStore = create<ChatState>((set) => ({
   msgContent: '',
   clickMsgSend: false,
   chatUserName: null,
+  user: null,
   setSession: (session) => set({ session }),
   setAuthChatIds: (chatIds) => set({ authChatIds: chatIds }),
   setCurChatUserId: (userId) => set({ curChatUserId: userId }),
   setCurChatId: (chatId) => set({ curChatId: chatId }),
   setMsgContent: (msgContent) => set({ msgContent }),
   setButtonClikMsgSend: (click) => set({clickMsgSend: click}),
-  setChatUserName: (name) => set({chatUserName: name})
+  setChatUserName: (name) => set({chatUserName: name}),
+  setUser: (user) => set({user: user})
+
 }));
 
 export default useChatStore
