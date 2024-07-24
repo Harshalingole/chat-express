@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import useGetMessages from "../../../../hooks/useGetMessages";
 import useStore from "../../../../store/useStore";
+import { cn } from "@/lib/utils";
 export type Message = {
   sender_id: string;
   chat_id: number;
@@ -34,7 +35,7 @@ const MessageList: React.FC = () => {
   }
   
   return (
-    <div className="flex flex-col space-y-4 p-4 overflow-y-auto h-[80%] md:h-[82%] no-scrollbar">
+    <div className={cn("flex flex-col space-y-2 p-4 overflow-y-auto h-[80%]  no-scrollbar")}>
       {messages.map((message) => (
         <div
           key={message.id}

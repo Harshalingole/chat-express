@@ -3,11 +3,12 @@ import useSendMessage from "../../../../hooks/useSendMessage";
 import useChatStore from "../../../../store/useStore";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 type FormData = {
   inputValue: { value: string };
 };
 const ChatInput: React.FC = () => {
-  const chatUserName = useChatStore((state) => state.chatUserName);
+  const {chatUserName, curChatId} = useChatStore((state) => state);
   const { sendMessage } = useSendMessage();
   const handleSendMessage = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -21,7 +22,7 @@ const ChatInput: React.FC = () => {
     <>
       {chatUserName && (
         <form
-          className="w-full p-4 bg-white shadow-md shadow-gray-800  flex justify-between  py-2 px-1"
+          className={cn("w-full p-4 bg-white shadow-md shadow-gray-800  flex justify-between  py-2 px-1 ")}
           onSubmit={handleSendMessage}
         >
           <Input
